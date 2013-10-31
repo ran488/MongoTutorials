@@ -20,5 +20,4 @@ public class InitialConnectionTest {
 	public void test() {
 		fail("Not yet implemented");
 	}
-
 }
