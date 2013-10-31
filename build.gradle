@@ -5,32 +5,25 @@ apply plugin: 'jacoco'
 apply plugin: 'pmd'
 apply plugin: 'build-dashboard'
 
-defaultTasks 'info', 'clean', 'check', 'build'
-
-sourceCompatibility = 1.5
 version = '1.0'
 
-repositories {
-	mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
-	testCompile group: 'junit', name:'junit', version:'4.+'
-	testCompile group: 'org.easymock', name:'easymock', version:'3.1'
-	testCompile group: 'org.mongodb', name:'mongo-java-driver', version:'2.11.3'
+	testCompile 'org.mongodb:mongo-java-driver:2.11.3'
+	testCompile 'junit:junit:4.+'
+	testCompile 'log4j:log4j:1.2.17'
+	testCompile 'org.easymock:easymock:3.1'
 }
 
-findbugs {
-	ignoreFailures = true	
-}
+findbugs { ignoreFailures = true }
 
 tasks.withType(FindBugs) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
- }
-
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
 
 task info() << {
 	println '**************'
