@@ -1,6 +1,7 @@
 package redneck.mongo;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -48,8 +49,8 @@ public class InitialConnection {
 			db.createCollection("names", null);
 
 		DBCollection names = db.getCollection("names");
-		BasicDBObject testName = new BasicDBObject("name", "Testing123")
-				.append("create_date", new java.util.Date());
+		Date today = new Date();
+		BasicDBObject testName = new BasicDBObject("name", "Testing123").append("create_date", today);
 		names.insert(testName);
 
 		DBCursor cursor = names.find();
