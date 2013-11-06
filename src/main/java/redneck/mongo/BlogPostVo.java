@@ -12,7 +12,7 @@ import java.util.Date;
 public class BlogPostVo implements Serializable {
 
 	private static final long serialVersionUID = -3607460895866972402L;
-	
+
 	private String author;
 	private String postBodyContents;
 	private String tags;
@@ -43,11 +43,15 @@ public class BlogPostVo implements Serializable {
 	}
 
 	public Date getPostedDate() {
-		return (Date) postedDate.clone();
+		if (postedDate != null)
+			return (Date) postedDate.clone();
+		else
+			return null;
 	}
 
 	public void setPostedDate(Date postedDate) {
-		this.postedDate = (Date) postedDate.clone();
+		if (postedDate != null)
+			this.postedDate = (Date) postedDate.clone();
 	}
 
 	@Override

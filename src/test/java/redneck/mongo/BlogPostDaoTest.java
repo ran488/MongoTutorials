@@ -17,8 +17,7 @@ import com.mongodb.MongoClient;
 
 public class BlogPostDaoTest {
 
-	private final static Logger log = Logger
-			.getLogger(BlogPostDaoTest.class);
+	private final static Logger log = Logger.getLogger(BlogPostDaoTest.class);
 
 	private BlogPostDao dao;
 	private static MongoClient mongoClient;
@@ -67,16 +66,52 @@ public class BlogPostDaoTest {
 	public void testDelete() {
 		BlogPostVo post = getNewPost("testDelete");
 		dao.insert(post);
-		DBCursor cursorBefore = db.getCollection(BlogPostDaoMongoImpl.COLLECTION)
-				.find();
+		DBCursor cursorBefore = db.getCollection(
+				BlogPostDaoMongoImpl.COLLECTION).find();
 		assertEquals(1, cursorBefore.count());
-		log.debug(String.format("Before deleting: %s", cursorBefore.next().toString()));
+		log.debug(String.format("Before deleting: %s", cursorBefore.next()
+				.toString()));
 		dao.delete(post);
-		DBCursor cursorAfter = db.getCollection(BlogPostDaoMongoImpl.COLLECTION)
-				.find();
+		DBCursor cursorAfter = db
+				.getCollection(BlogPostDaoMongoImpl.COLLECTION).find();
 		// these two assertions are really 2 sides of the same coin...
 		assertEquals(0, cursorAfter.count());
 		assertFalse(cursorAfter.hasNext());
+	}
+
+	@Test
+	public void testFindByExample_AllFieldsPopulated() {
+		BlogPostVo initVo = getNewPost("FindJustThisOne");
+		for (int x = 0; x < 10; x++) {
+			dao.insert(getNewPost(String.format("testFindByExample+%s", x)));
+		}
+		dao.insert(initVo);
+		for (int x = 10; x < 20; x++) {
+			dao.insert(getNewPost(String.format("testFindByExample+%s", x)));
+		}
+		
+		BlogPostVo criteria = initVo;
+		log.debug(String.format("Criteria: %s",criteria.toString()));
+		List<BlogPostVo> results = dao.findByExample(criteria);
+		for (BlogPostVo vo: results) {
+			log.debug(String.format("Found: %s", vo.toString()));
+		}
+		assertEquals(1, results.size());
+	}
+	
+	@Test
+	public void testFindByExample_OnlyNameFieldPopulated() {
+		for (int x = 0; x < 10; x++) {
+			dao.insert(getNewPost(String.format("testFindByExample+%s", x)));
+		}		
+		BlogPostVo criteria = new BlogPostVo();
+		criteria.setAuthor("testFindByExample+4");
+		log.debug(String.format("Criteria: %s",criteria.toString()));
+		List<BlogPostVo> results = dao.findByExample(criteria);
+		for (BlogPostVo vo: results) {
+			log.debug(String.format("Found: %s", vo.toString()));
+		}
+		assertEquals(1, results.size());
 	}
 
 	private BlogPostVo getNewPost(String name) {
