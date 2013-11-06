@@ -33,7 +33,7 @@ public class BlogPostDaoMongoImpl implements BlogPostDao {
 
 	@Override
 	public void insert(BlogPostVo newPost) {
-		log.debug(String.format("Inserting: ", newPost.toString()));
+		log.debug(String.format("Inserting: %s", newPost.toString()));
 		BasicDBObject o = voToDbObject(newPost);
 		blogPosts.insert(o);
 	}
@@ -42,7 +42,7 @@ public class BlogPostDaoMongoImpl implements BlogPostDao {
 
 	@Override
 	public void delete(BlogPostVo oldPost) {
-		log.debug(String.format("Deleting: ", oldPost.toString()));
+		log.debug(String.format("Deleting: %s", oldPost.toString()));
 		blogPosts.remove(voToDbObject(oldPost));
 	}
 
