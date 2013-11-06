@@ -33,6 +33,7 @@ public class BlogPostDaoMongoImpl implements BlogPostDao {
 
 	@Override
 	public void insert(BlogPostVo newPost) {
+		log.debug(String.format("Inserting: ", newPost.toString()));
 		BasicDBObject o = voToDbObject(newPost);
 		blogPosts.insert(o);
 	}
@@ -41,8 +42,8 @@ public class BlogPostDaoMongoImpl implements BlogPostDao {
 
 	@Override
 	public void delete(BlogPostVo oldPost) {
-		// TODO Auto-generated method stub
-
+		log.debug(String.format("Deleting: ", oldPost.toString()));
+		blogPosts.remove(voToDbObject(oldPost));
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class BlogPostDaoMongoImpl implements BlogPostDao {
 
 	@Override
 	public List<BlogPostVo> findAll() {
+		log.debug("Querying ALL: ");
 		List<BlogPostVo> results = new ArrayList<BlogPostVo>();
 		DBCursor cursor = blogPosts.find();
 		while (cursor.hasNext()) {

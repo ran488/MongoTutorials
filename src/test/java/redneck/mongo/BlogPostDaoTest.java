@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,9 @@ import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 
 public class BlogPostDaoTest {
+
+	private final static Logger log = Logger
+			.getLogger(BlogPostDaoTest.class);
 
 	private BlogPostDao dao;
 	private static MongoClient mongoClient;
@@ -54,9 +58,25 @@ public class BlogPostDaoTest {
 		}
 		List<BlogPostVo> posts = dao.findAll();
 		for (BlogPostVo post : posts) {
-			System.out.println(post);
+			log.debug(post);
 		}
 		assertEquals(10, posts.size());
+	}
+
+	@Test
+	public void testDelete() {
+		BlogPostVo post = getNewPost("testDelete");
+		dao.insert(post);
+		DBCursor cursorBefore = db.getCollection(BlogPostDaoMongoImpl.COLLECTION)
+				.find();
+		assertEquals(1, cursorBefore.count());
+		log.debug(String.format("Before deleting: %s", cursorBefore.next().toString()));
+		dao.delete(post);
+		DBCursor cursorAfter = db.getCollection(BlogPostDaoMongoImpl.COLLECTION)
+				.find();
+		// these two assertions are really 2 sides of the same coin...
+		assertEquals(0, cursorAfter.count());
+		assertFalse(cursorAfter.hasNext());
 	}
 
 	private BlogPostVo getNewPost(String name) {
