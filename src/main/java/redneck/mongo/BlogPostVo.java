@@ -43,11 +43,11 @@ public class BlogPostVo implements Serializable {
 	}
 
 	public Date getPostedDate() {
-		return postedDate;
+		return (Date) postedDate.clone();
 	}
 
 	public void setPostedDate(Date postedDate) {
-		this.postedDate = postedDate;
+		this.postedDate = (Date) postedDate.clone();
 	}
 
 	@Override
